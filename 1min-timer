@@ -1,0 +1,12 @@
+#!/bin/bash
+
+clear
+let x=1
+while [ $x -lt 61 ]
+do
+    echo "$x"
+    let x=$x+1
+    sleep 1
+    clear
+done
+

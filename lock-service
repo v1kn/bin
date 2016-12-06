@@ -1,0 +1,10 @@
+#!/bin/bash
+
+shot=$HOME/Downloads/screen.png
+scrot $shot
+convert $shot -scale 10% -scale 1000% $shot
+convert $shot -composite -matte $shot
+
+i3lock -e -f -i $shot
+
+rm $shot

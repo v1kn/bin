@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl suspend
+i3lock
+echo mem > /sys/power/state

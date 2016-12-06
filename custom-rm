@@ -1,0 +1,26 @@
+#!/bin/sh
+set -eu
+
+#==========
+#   1. copy this file into /usr/local/bin and name it rm
+#   2. chown it for root
+#   3. make sure that /usr/local/bin is before /bin in $PATH
+#==========
+
+for arg; do
+    case "$arg" in
+        -?*) ;;
+        *)
+            realarg="$(realpath "$arg")"
+            case "$realarg" in
+                /|/usr|/var|/etc|/home|/home/vlkn|/bin|/lib|/lib64|/boot|/opt|/media|/root)
+
+                    echo "refusing to remove $realarg" 1>&2
+                    exit 100
+                    ;;
+            esac
+            ;;
+    esac
+done
+
+exec /bin/rm --one-file-system --preserve-root "$@"

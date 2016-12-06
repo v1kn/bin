@@ -1,0 +1,22 @@
+#!/bin/bash
+#incomplete
+
+read URL
+
+urlname=$(echo $URL | sed 's/\//_/g' | sed 's/://g' | sed 's/http__//g' | sed 's/html.*/html/g')
+
+wget $URL -O $urlname
+
+mv /home/xuval/"$urlname" /home/xuval/Downloads/
+w3m -dump /home/xuval/Downloads/"$urlname" > /home/xuval/Downloads/"$urlname".md
+pandoc -V fontsize=12pt --latex-engine=xelatex -V mainfont="TakaoMincho" /home/xuval/Downloads/"$urlname".md -o /home/xuval/Downloads/"$urlname".pdf
+ 
+
+
+# placeholder for extracting title from html before feeding it to vim
+
+
+# vim ex mode ranges
+# vim [file] +1,/word/-1\d
+#this deletes everything from the first line until the line with
+# [word] in it, excluding that line
