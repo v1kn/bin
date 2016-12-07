@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# how bash case works
+# how to use case conditions in bash
 
 printf '%s ' 'Which fruit do you like most?'
 read -r fruit
