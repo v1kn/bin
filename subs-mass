@@ -1,0 +1,9 @@
+#!/bin/bash
+
+subs-mass() {
+    ext=( -iname \*.mp4 -o -iname \*.avi -o -iname \*.mkv )
+    find . -depth -type f \( "${ext[@]}" \) -print0 | sort -zn |
+    xargs -0 -I{} -n1 -P$(($(nproc) / 2)) sh -c 'subdownloader -c -l en --rename-subs -V "{}"; echo processed "{}"'
+}
+
+subs-mass

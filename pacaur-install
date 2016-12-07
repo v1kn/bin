@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd $HOME
+git clone https://aur.archlinux.org/cower.git
+cd cower
+sudo gpg --keyserver hkp://pgp.mit.edu --recv-keys 1EB2638FF56C0C53
+makepkg -sir --noconfirm --asdeps
+git clone https://aur.archlinux.org/pacaur.git
+cd pacaur
+makepkg -sir --noconfirm
+cd $HOME
+rm -rf cower

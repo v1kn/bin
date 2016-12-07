@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# showing installed headers in ubuntu
+# to uninstall these headers, pipe it through to "| xargs dpkg -r"
+showheader() {
+    dpkg-query -l linux-header* | grep 'ii ' |
+    while read k
+    do
+        v=$(echo "$k" | cut -d- -f4 | cut -d' ' -f1)
+        [ ! -z "$v" ] && [ "$v" -le $(uname -r | cut -d- -f 2) ] && echo $k | cut -d' ' -f2
+    done
+}
+
+showheader

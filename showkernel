@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# showing installed kernels in ubuntu
+showkernel() {
+    dpkg-query -l linux-image* | grep 'ii ' | fgrep '4.4' | awk '{print $2}'
+}
+
+showkernel

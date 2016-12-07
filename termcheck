@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# check terminal features ( truecolor, italic, bold, underline, strikethrough)
+termcheck() {
+    echo -e "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m"
+    echo -e "\e[3mitalics\e[23m"
+    echo -e "\e[1mbold\e[0m"
+    echo -e "\e[4munderline\e[0m"
+    echo -e "\e[9mstrikethrough\e[0m"
+    echo -e "\e[31mHello World\e[0m"
+}
+
+termcheck

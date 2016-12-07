@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# check whether flacs in subdirectores have a YEAR tag
+checkyearflac() {
+    find . -depth -type f -name "*.flac" |
+    while read -r track
+    do
+        year=$(metaflac --show-tag=YEAR "$track")
+        [[ -z "$year" ]] && echo ""$track" has no YEAR tag"
+    done
+}
+
+checkyearflac

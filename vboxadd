@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# adding all virtual machines to virtualbox at once
+vboxadd() {
+find "/media/wde2/virt/vm/" -depth -type f -name "*.vbox" |
+while read vm
+do
+    VBoxManage registervm "$vm"
+done
+}
+
+vboxadd

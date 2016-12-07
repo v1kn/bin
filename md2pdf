@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# convert markdown to html with pandoc
+md2pdf() {
+    local IFS=+
+    local format=(
+        markdown_github
+        footnotes
+        fenced_code_attributes
+        pandoc_title_block
+        shortcut_reference_links
+    )
+    pandoc \
+        -f "${format[*]}" \
+        -V fontsize=12pt \
+        -V mainfont="TakaoMincho" \
+        --latex-engine=xelatex \
+        -S \
+        --toc \
+        "$@"
+}
+
+md2pdf

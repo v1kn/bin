@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# add a YEAR tag to flacs in all subdirectories
+addyearflac() {
+    find . -depth -type f -name "*.flac" |
+    while read -r track
+    do
+        year=$(metaflac --show-tag=DATE "$track" | cut -d= -f 2)
+        metaflac --set-tag="YEAR=$year" "$track"
+    done
+}
+
+addyearflac

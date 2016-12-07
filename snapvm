@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# delete and redo a "0" snapshot of each vm in virtualbox
+snapvm() {
+    VBoxManage list vms | cut -d\" -f2 |
+    while read vm
+    do
+        VBoxManage snapshot "$vm" delete 0
+        VBoxManage snapshot "$vm" take 0
+    done
+}
+
+snapvm

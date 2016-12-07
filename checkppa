@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# check if PPAs are compatible with this ubuntu version
+checkppa() {
+    dist=$(lsb_release -sc)
+    ppas=$(grep -RoPish '(?<=ppa.launchpad.net/)[^/]+/[^/ ]+' /etc/apt | sort -u)
+    while read -r ppa; do
+        url="http://ppa.launchpad.net/$ppa/ubuntu/dists/$dist/"
+        if [[ $(wget -O /dev/null "$url" 2>&1|grep "200 OK"|wc -l) == "0" ]]
+        then
+            echo "$ppa does not have a $dist version"
+        fi
+    done <<< "$ppas"
+}
+
+checkppa

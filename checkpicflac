@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# check if flacs in subdirectories have album art embedded
+checkpicflac() {
+    find . -depth -type f -name "*.flac" |
+    while read -r track
+    do
+        pic=$(metaflac --list --block-type=PICTURE "$track")
+        [[ -z "$pic" ]] && echo ""$track" has no picture"
+    done
+}
+
+checkpicflac
