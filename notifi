@@ -1,12 +1,10 @@
 #!/bin/bash
 shopt -s globstar
 
-dirs="$HOME/.cargo/bin $HOME/.gem/*/bin $HOME/.local/pyvenv/bin $HOME/git-repos/bin"
+dirs="$HOME/.local/gem/bin $HOME/.local/pyvenv/bin $HOME/grepo/bin"
 
-while inotifywait -e create -e delete $dirs; do
+while inotifywait -e create -e delete -e modify -e attrib -e move $dirs; do
     find $HOME/.local/bin -type l -delete
-    # arch
-    find $dirs -type f -executable -exec ln -s {} $HOME/bin \;
-    # ubuntu
+    find $dirs -follow -mindepth 1 -maxdepth 1 -type f -executable -exec ln -s {} $HOME/.local/bin \;
     #find $dirs -type f -executable -exec ln -s ${PWD}/{} $HOME/bin \;
 done

@@ -1,10 +1,5 @@
 #!/bin/bash
 
-#==========
-#   1. copy this file into /usr/local/bin
-#   2. rename it to sth easier like ccnow
-#==========
-
 sync
 echo 3 > /proc/sys/vm/drop_caches
 sleep 5

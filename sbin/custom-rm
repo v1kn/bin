@@ -1,11 +1,5 @@
-#!/bin/sh
-set -eu
-
-#==========
-#   1. copy this file into /usr/local/bin and name it rm
-#   2. chown it for root
-#   3. make sure that /usr/local/bin is before /bin in $PATH
-#==========
+#!/usr/bin/env bash
+set -euo pipefail
 
 for arg; do
     case "$arg" in

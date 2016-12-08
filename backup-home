@@ -3,7 +3,7 @@
 
 # copy procedure
 mkdir /tmp/backup
-rsync -avAXh $HOME/git-repos --exclude 'others' /tmp/backup/dotfiles-`date +%y%m%d_%H%M`
+rsync -avAXh $HOME/grepo --exclude 'others' /tmp/backup/dotfiles-`date +%y%m%d_%H%M`
 
 # define the name of a newly created backup
 file=$(ls /tmp/backup)
