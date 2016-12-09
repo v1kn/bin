@@ -6,5 +6,5 @@ dirs="$HOME/.local/gem/bin $HOME/.local/pyvenv/bin $HOME/grepo/bin"
 while inotifywait -e create -e delete -e modify -e attrib -e move $dirs; do
     find $HOME/.local/bin -type l -delete
     find $dirs -follow -mindepth 1 -maxdepth 1 -type f -executable -exec ln -s {} $HOME/.local/bin \;
-    #find $dirs -type f -executable -exec ln -s ${PWD}/{} $HOME/bin \;
+    #find $dirs -follow -mindepth 1 -maxdepth 1 -type f -executable -exec ln -s ${PWD}/{} $HOME/.local/bin \;
 done
