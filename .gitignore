@@ -29,7 +29,8 @@ Session.vim
 tags
 
 # scripts
-vayd/
+vdl-bundle/*
+!vdl-bundle/vdl
 twif/
 archlinux-install
 vd
