@@ -4,12 +4,12 @@
 ## vdl - script for fetching new vids from yt
 ## htps://github.com/v1kn
 ## 20150421 - init
-## 20161213 - major rewrite (collapsing 2 loops into 1)
+## 20161213 - rewrite (collapsing 2 loops into 1)
 ##
 
 # script files parent directory
 # `readlink -f` will resolve symlinks, but is most likely GNU specific
-src="$( cd "$( dirname $(readlink -f "${BASH_SOURCE[0]}") )" && pwd)"
+src=$( cd "$( dirname $(readlink -f "${BASH_SOURCE[0]}") )" && pwd) || exit
 
 __main() {
     for i in "$src"/vdl-users "$src"/vdl-channels; do
@@ -31,10 +31,12 @@ __main() {
                 | sed -e 's/^[[:space:]]*//')
 
             if [[ -n "$newvidlist" ]]; then
-                # download new videos
+                # download new videos, exit in case of errors
                 while read newvid; do
                     echo -e "\nfound new videos from "$item"\ndownloading"
-                    youtube-dl -- "https://www.youtube.com/watch?v="$newvid""
+                    youtube-dl -- \
+                        "https://www.youtube.com/watch?v="$newvid"" \
+                        || exit
                 done <<< "$(echo "$newvidlist")"
                 # merge new vid IDs into user ytfile atomically
                 echo "$newvidlist" \
