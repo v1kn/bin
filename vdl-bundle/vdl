@@ -1,101 +1,56 @@
 #!/bin/bash
 
 ##
-##vdl - vlkn's Automated youtube downloader"
-##htps://github.com/v1kn
-##2015/04/21"
+## vdl - script for fetching new vids from yt
+## htps://github.com/v1kn
+## 20150421 - init
+## 20161213 - major rewrite (collapsing 2 loops into 1)
 ##
 
 # script files parent directory
-#src="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # `readlink -f` will resolve symlinks, but is most likely GNU specific
 src="$( cd "$( dirname $(readlink -f "${BASH_SOURCE[0]}") )" && pwd)"
 
+__main() {
+    for i in "$src"/vdl-users "$src"/vdl-channels; do
+        while read item; do
+            # grep video IDs, put them in a temp file
+            [[ "$i" = "$src"/vdl-users ]] && uorc="user" || uorc="channel"
+            lynx --source "https://www.youtube.com/"$uorc"/"$item"/videos" \
+                | grep data-context-item-id \
+                | cut -d\= -d\" -f2 \
+                | sed -n '1,20p' \
+                | cat > "$src"/ytfile-"$item"-temp
 
-# start the main loop for users
-echo -e "\n========================="
-date
-echo -e ""
-#cat "$src"/vdl-users |
-while read user; do
-    # grep video IDs, put them in a temp file
-    lynx --source "https://www.youtube.com/user/"$user"/videos" \
-        | grep data-context-item-id \
-        | cut -d\= -d\" -f2 \
-        | sed -n '1,20p' \
-        | cat > "$src"/ytfile-"$user"-temp
+            # define variables and diff them
+            oldfile="$src"/ytfile-"$item"
+            newfile="$src"/ytfile-"$item"-temp
+            newvidlist=$(diff "$newfile" "$oldfile" \
+                | grep "<" \
+                | cut -d\< -f2 \
+                | sed -e 's/^[[:space:]]*//')
 
-    # define variables and diff them
-    oldfile="$src"/ytfile-"$user"
-    newfile="$src"/ytfile-"$user"-temp
-    newvidlist=$(diff "$newfile" "$oldfile" \
-        | grep "<" \
-        | cut -d\< -f2 \
-        | sed -e 's/^[[:space:]]*//')
+            if [[ -n "$newvidlist" ]]; then
+                # download new videos
+                while read newvid; do
+                    echo -e "\nfound new videos from "$item"\ndownloading"
+                    youtube-dl -- "https://www.youtube.com/watch?v="$newvid""
+                done <<< "$(echo "$newvidlist")"
+                # merge new vid IDs into user ytfile atomically
+                echo "$newvidlist" \
+                    | cat - "$src"/ytfile-"$item" \
+                    > "$src"/ytfile-"$item"-merge \
+                    && mv "$src"/ytfile-"$item"-merge "$src"/ytfile-"$item"
+                rm "$newfile"
+            else
+                echo -e "\nno new videos from "$item""
+                [[ -f "$newfile" ]] && rm "$newfile"
+            fi
+        done <<< "$(< "$i")"
+    done
+}
 
-    if [[ -n "$newvidlist" ]]; then
-        # download new videos
-        echo "$newvidlist" |
-        while read newvid; do
-            echo -e "\nfound new videos from "${cyan}""$user""${nc}"\ndownloading..."
-            sleep 1
-            "$HOME"/.local/bin/youtube-dl -- https://www.youtube.com/watch?v=$newvid
-        done
-        echo -e "\n "${cyan}" Done! "${nc}" "
-
-        # merge new vid IDs into user ytfile
-        echo "$newvidlist" \
-            | cat - "$src"/ytfile-"$user" > "$src"/ytfile-"$user"-merge \
-            && mv "$src"/ytfile-"$user"-merge "$src"/ytfile-"$user"
-        rm "$newfile"
-    else
-        echo -e "\nno new videos from "$user""
-        [[ -f "$newfile" ]] && rm "$newfile"
-    fi
-done <<< "$(< "$src"/vdl-users)"
-
-# start the main loop for channels
-cat "$src"/vdl-channels |
-while read channel; do
-    lynx --source "https://www.youtube.com/channel/"$channel"/videos" \
-        | grep data-context-item-id \
-        | cut -d\= -d\" -f2 \
-        | sed -n '1,20p' \
-        | cat > "$src"/ytfile-"$channel"-temp
-
-    # define variables and diff them
-    oldfile="$src"/ytfile-"$channel"
-    newfile="$src"/ytfile-"$channel"-temp
-    newvidlist=$( diff "$newfile" "$oldfile" \
-        | grep "<" \
-        | cut -d\< -f2 \
-        | sed -e 's/^[[:space:]]*//' )
-
-    if [[ -n "$newvidlist" ]]
-    then
-        # download new videos
-        echo "$newvidlist" |
-        while read newvid; do
-            echo -e "found new videos from "${cyan}""$channel""${nc}"\ndownloading..."
-            sleep 1
-            "$HOME"/.local/bin/youtube-dl -- https://www.youtube.com/watch?v=$newvid
-        done
-        echo -e "\n"${cyan}"Done!"${nc}""
-
-        # merge new vid IDs into user ytfile
-        echo "$newvidlist" \
-            | cat - "$src"/ytfile-"$channel" > "$src"/ytfile-"$channel"-merge \
-            && mv "$src"/ytfile-"$channel"-merge "$src"/ytfile-"$channel"
-        rm "$newfile"
-    else
-        echo -e "\nno new videos from "$channel""
-        [[ -f "$newfile" ]] && rm "$newfile"
-    fi
-done
-echo -e "\n\n"${cyan}"ALL DONE!"${nc}""
-
-# pacmd command demands a specified sink from pulseaudio.
-# To determine the sink, run `pacmd list-sinks`, and paste the name of the
-# default sink behind the sound file path
-#pacmd play-file /usr/share/sounds/freedesktop/stereo/complete.oga alsa_output.pci-0000_00_1b.0.analog-stereo
-notify-send -t 10000 $'CHECK FOR NEW YT VIDEOS'
+# printf '%13s%b\n' | tr " " "="
+echo -e "\n============================\n$(date)"
+__main
+notify-send -t 10000 "Check for new YT vids"
