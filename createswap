@@ -1,0 +1,22 @@
+#!/bin/bash
+# creates swap file.
+# Optionally specify size (e.g. 1024M)
+#
+# <ricky@rickyhewitt.me>
+
+if [ $1 ]; then
+    SWAP_SIZE=$1
+else
+    echo "No swap size specified."
+    exit 1; # fail
+fi
+
+echo "Creating swap file with size of $SWAP_SIZE"
+
+fallocate -l $SWAP_SIZE /swap
+mkswap /swap
+chmod 600 /swap
+swapon /swap
+sed -i -e '$a/swap   none    swap    sw    0   0' /etc/fstab
+sysctl vm.swappiness=10
+sed -i -e '$avm.swappiness=10' /etc/sysctl.conf

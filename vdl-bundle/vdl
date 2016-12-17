@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o pipefail
 
 ##
 ## vdl - script for fetching new vids from yt
@@ -20,7 +21,7 @@ __main() {
                 | grep data-context-item-id \
                 | cut -d\= -d\" -f2 \
                 | sed -n '1,20p' \
-                | cat > "$src"/ytfile-"$item"-temp
+                | cat > "$src"/ytfile-"$item"-temp || exit
 
             # define variables and diff them
             oldfile="$src"/ytfile-"$item"
@@ -31,12 +32,11 @@ __main() {
                 | sed -e 's/^[[:space:]]*//')
 
             if [[ -n "$newvidlist" ]]; then
-                # download new videos, exit in case of errors
+                # download new videos
                 while read newvid; do
                     echo -e "\nfound new videos from "$item"\ndownloading"
-                    youtube-dl -- \
-                        "https://www.youtube.com/watch?v="$newvid"" \
-                        || exit
+                        youtube-dl -- \
+                            "https://www.youtube.com/watch?v="$newvid""
                 done <<< "$(echo "$newvidlist")"
                 # merge new vid IDs into user ytfile atomically
                 echo "$newvidlist" \
