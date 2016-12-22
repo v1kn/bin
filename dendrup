@@ -1,0 +1,24 @@
+#!/bin/bash
+
+##
+##  dendrup
+##      :: back up only directory structure and file list of disk contents
+##  vlkn
+##  https://github.com/v1kn
+##  2016/12/22
+##
+
+# create timestamped directory
+src=""$HOME"/$(date +%y%m%d%H%M)-tree_backup"
+mkdir -p "$src"
+
+# create backup tree files
+for i in $(/bin/ls /media/); do
+    [[ "$i" = "$USER" ]] && continue
+    tree -ahpuD --du --dirsfirst /media/"$i" > "$src"/"$i".txt
+    tree -ad /media/"$i" > "$src"/"$i"_dirs.txt
+done
+
+# move onto wde2
+cp -r "$src" /media/wde2/archived/system-backups/treefiles/
+rm "$src"
