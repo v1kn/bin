@@ -33,4 +33,4 @@ vdl-bundle/*
 !vdl-bundle/vdl
 twif/
 archlinux-install
-vd
+excludes/

@@ -1,19 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-shot=$HOME/Downloads/screen.png
+shot="$HOME"/Downloads/screen.png
 
-scrot $shot
-convert $shot -scale 10% -scale 1000% $shot
-convert $shot -composite -matte $shot
+scrot "$shot"
+convert "$shot" -scale 10% -scale 1000% "$shot"
+convert "$shot" -composite -matte "$shot"
 
 bat=$(acpi -a)
-if [[ $bat == "Adapter 0: on-line" ]]
-then
-    i3lock -e -f -i $shot
+if [[ "$bat" = "Adapter 0: on-line" ]]; then
+    i3lock -e -f -i "$shot"
 else
-    i3lock -e -f -i $shot
+    i3lock -e -f -i "$shot"
     sleep 120
     systemctl suspend
 fi
-
-rm $shot
+rm "$shot"

@@ -1,11 +1,19 @@
 #!/bin/bash
 
+##
+##  pacaur-install
+##      :: automated installation of `pacaur` AUR helper
+##  v1kn
+##  https://github.com/v1kn
+##  2016/11/25
+##
+
 cd $HOME
-git clone https://aur.archlinux.org/cower.git
+git clone https://aur.archlinux.org/cower.git || exit
 cd cower
 sudo gpg --keyserver hkp://pgp.mit.edu --recv-keys 1EB2638FF56C0C53
 makepkg -sir --noconfirm --asdeps
-git clone https://aur.archlinux.org/pacaur.git
+git clone https://aur.archlinux.org/pacaur.git || exit
 cd pacaur
 makepkg -sir --noconfirm
 cd $HOME

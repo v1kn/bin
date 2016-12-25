@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -o pipefail
 
 ##
-## vdl - script for fetching new vids from yt
-## htps://github.com/v1kn
-## 20150421 - init
-## 20161213 - rewrite (collapsing 2 loops into 1)
+##  vdl
+##      :: script for fetching new vids from yt
+##  v1kn
+##  https://github.com/v1kn
+##  2015/04/21
 ##
 
-# script files parent directory
-# `readlink -f` will resolve symlinks, but is most likely GNU specific
+#   script files parent directory
+#   `readlink -f` will resolve symlinks, but is most likely GNU specific
 src=$( cd "$( dirname $(readlink -f "${BASH_SOURCE[0]}") )" && pwd) || exit
 
 __main() {
@@ -37,7 +38,7 @@ __main() {
                     echo -e "\nfound new videos from "$item"\ndownloading"
                         youtube-dl -- \
                             "https://www.youtube.com/watch?v="$newvid""
-                done <<< "$(echo "$newvidlist")"
+                done <<< $(echo "$newvidlist")
                 # merge new vid IDs into user ytfile atomically
                 echo "$newvidlist" \
                     | cat - "$src"/ytfile-"$item" \

@@ -8,17 +8,26 @@
 ##  2016/12/22
 ##
 
-# create timestamped directory
-src=""$HOME"/$(date +%y%m%d%H%M)-tree_backup"
-mkdir -p "$src"
 
-# create backup tree files
-for i in $(/bin/ls /media/); do
-    [[ "$i" = "$USER" ]] && continue
-    tree -ahpuD --du --dirsfirst /media/"$i" > "$src"/"$i".txt
-    tree -ad /media/"$i" > "$src"/"$i"_dirs.txt
-done
+#   create backup tree files
+if [[ $(lsblk -nS | wc -l) = 1 ]]; then
+    echo "no drives to backup, exiting"
+    exit
+else
+    src=""$HOME"/$(date +%y%m%d%H%M)-tree_backup"
+    mkdir -p "$src"
+    for i in $(/bin/ls /media/); do
+        [[ "$i" = "$USER" ]] && continue
+        tree -ahpuD --du --dirsfirst /media/"$i" > "$src"/"$i".txt
+        tree -ad /media/"$i" > "$src"/"$i"_dirs.txt
+    done
+fi
 
-# move onto wde2
-cp -r "$src" /media/wde2/archived/system-backups/treefiles/
-rm "$src"
+# move onto wde2 if present
+if [[ -d /media/wde2 ]]; then
+    cp -r "$src" /media/wde2/archived/system-backups/treefiles/
+    rm "$src"
+else
+    echo "no external backup drive, exiting"
+    exit
+fi

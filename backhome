@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+##
+##  backhome
+##      :: using tar and xz to backup most important things
+##  v1kn
+##  https://github.com/v1kn
+##  2016/12/22
+##
+
+#   copy procedure
+backfile="dotfiles-$(date +%y%m%d_%H%M)"
+mkdir -p /tmp/backup/"$backfile" || exit
+rsync \
+    -avAXh \
+    $HOME/{filez,grepo} \
+    --exclude-from=$HOME/grepo/bin/excludes/backhome-excludes \
+    /tmp/backup/"$backfile"
+
+#   make an atomic txz archive
+cd /tmp/backup
+tar -C /tmp/backup -cpaf "$backfile"-tmp.txz "$backfile"/{filez,grepo}
+mv /tmp/backup/"$backfile"-tmp.txz $HOME/filez/backup/"$backfile".txz
+rm -rf /tmp/backup
