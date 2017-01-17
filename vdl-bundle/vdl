@@ -22,7 +22,7 @@ __main() {
                 | grep data-context-item-id \
                 | cut -d\= -d\" -f2 \
                 | sed -n '1,20p' \
-                | cat > "$src"/ytfile-"$item"-temp || exit
+                | cat > "$src"/ytfile-"$item"-temp
 
             # define variables and diff them
             oldfile="$src"/ytfile-"$item"
@@ -38,7 +38,7 @@ __main() {
                     echo -e "\nfound new videos from "$item"\ndownloading"
                         youtube-dl -- \
                             "https://www.youtube.com/watch?v="$newvid""
-                done <<< $(echo "$newvidlist")
+                done <<< "$newvidlist"
                 # merge new vid IDs into user ytfile atomically
                 echo "$newvidlist" \
                     | cat - "$src"/ytfile-"$item" \
@@ -49,7 +49,7 @@ __main() {
                 echo -e "\nno new videos from "$item""
                 [[ -f "$newfile" ]] && rm "$newfile"
             fi
-        done <<< "$(< "$i")"
+        done < "$i"
     done
 }
 
