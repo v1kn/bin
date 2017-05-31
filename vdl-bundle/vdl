@@ -36,7 +36,7 @@ __main() {
                 # download new videos
                 while read newvid; do
                     echo -e "\nfound new videos from "$item"\ndownloading"
-                        youtube-dl -- \
+                        youtube-dl -f 18 -- \
                             "https://www.youtube.com/watch?v="$newvid""
                 done <<< "$newvidlist"
                 # merge new vid IDs into user ytfile atomically

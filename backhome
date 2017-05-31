@@ -12,7 +12,7 @@
 backfile="dotfiles-$(date +%y%m%d_%H%M)"
 mkdir -p /tmp/backup/"$backfile" || exit
 rsync \
-    -avAXh \
+    -avAXhq \
     $HOME/{filez,grepo} \
     --exclude-from=$HOME/grepo/bin/excludes/backhome-excludes \
     /tmp/backup/"$backfile"
@@ -21,4 +21,5 @@ rsync \
 cd /tmp/backup
 tar -C /tmp/backup -cpaf "$backfile"-tmp.txz "$backfile"/{filez,grepo}
 mv /tmp/backup/"$backfile"-tmp.txz $HOME/filez/backup/"$backfile".txz
+cd ~
 rm -rf /tmp/backup
