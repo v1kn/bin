@@ -1,9 +1,8 @@
 #!/bin/bash
 
-set -e
-
 source $HOME/.local/pyvenv/bin/activate
 pip3 install -U $(pip3 list -o --format legacy | cut -d\  -f1)
 deactivate
 
-gem update -i $HOME/.local/gem
+gem update
+gem cleanup
