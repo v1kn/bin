@@ -25,7 +25,7 @@ fi
 
 # move onto wde2 if present
 if [[ -d /media/wde2 ]]; then
-    cp -r "$src" /media/wde2/archived/system-backups/treefiles/
+    cp -r "$src" /media/wde2/archived/system-backups/treefiles/ || exit
     rm rf "$src"
 else
     echo "no external backup drive, exiting"
