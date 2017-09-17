@@ -9,7 +9,7 @@ shopt -s globstar
 ##  2016/12/06
 ##
 
-dirs="$HOME/.local/gem/bin $HOME/.local/pyvenv/bin $HOME/grepo/bin"
+dirs="$HOME/.gem/ruby/2.3.0/bin $HOME/.local/pyvenv/bin $HOME/grepo/bin"
 
 while inotifywait -e create -e delete -e modify -e attrib -e move $dirs; do
     find $HOME/.local/bin \
