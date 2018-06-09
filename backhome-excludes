@@ -1,0 +1,15 @@
+##
+##  excludes for backhome script
+##
+
+#   from `filez` folder
+backup/*
+dotfiles/vim/.vim/undo/*
+dotfiles/vim/.vim/swap/*
+dotfiles/vim/.vim/backup/*
+dotfiles/mpv/.config/mpv/watch_later/*
+japanese/genki-1ed
+japanese/genki-2ed
+
+#   from `grepo` folder
+others

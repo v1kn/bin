@@ -14,7 +14,7 @@ mkdir -p /tmp/backup/"$backfile" || exit
 rsync \
     -avAXhq \
     $HOME/{filez,grepo} \
-    --exclude-from=$HOME/grepo/bin/excludes/backhome-excludes \
+    --exclude-from=$HOME/grepo/bin/backhome-excludes \
     /tmp/backup/"$backfile"
 
 #   make an atomic txz archive

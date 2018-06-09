@@ -31,6 +31,5 @@ tags
 # scripts
 vdl-bundle/*
 !vdl-bundle/vdl
-twif/
-archlinux-install
-excludes/
+!vdl-bundle/vdl-channels
+!vdl-bundle/vdl-users
