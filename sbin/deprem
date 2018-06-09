@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# removing build dependencies installed with apt-get build-dep
-deprem() {
-    aptitude markauto $(apt-cache showsrc $1 | grep Build-Depends |
-    perl -p -e 's/(?:[\[(].+?[\])]|Build-Depends:|,|\|)//g')
-}
-
-deprem
