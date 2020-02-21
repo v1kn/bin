@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source $HOME/.local/pyvenv/bin/activate
-pip3 install -U $(pip3 list -o --format legacy | cut -d\  -f1)
+pip3 install -U $(pip3 list -o --format freeze | cut -d\= -f1)
 deactivate
 
 gem update
